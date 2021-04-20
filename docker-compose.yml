@@ -1,0 +1,75 @@
+version: "3"
+services:
+  docker-in-docker:
+    image: 'docker:dind'
+    restart: unless-stopped
+    privileged: true
+    networks: 
+        sonarnet:
+            aliases: 
+                - docker  
+    environment:
+        - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+        - jenkins-docker-certs:/certs/client
+        - jenkins-data:/var/jenkins_home
+    ports:
+        - 2376:2376
+  jenkins:
+    image: myjenkins-blueocean:1.1
+    networks: 
+        - sonarnet
+    environment:
+        - DOCKER_HOST=tcp://docker:2376
+        - DOCKER_CERT_PATH=/certs/client
+        - DOCKER_TLS_VERIFY=1
+    ports:
+        - 9871:8080
+        - 50000:50000
+    volumes:
+        - jenkins-data:/var/jenkins_home
+        - jenkins-docker-certs:/certs/client:ro
+  sonarqube:
+    image: sonarqube:latest
+    restart: unless-stopped
+    networks: 
+        - sonarnet
+    environment:
+        - SONARQUBE_JDBC_USERNAME=sonar
+        - SONARQUBE_JDBC_PASSWORD=sonar
+        - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+    ports:
+        - 9872:9000
+    volumes:
+        - sonarqube_conf:/opt/sonarqube/conf
+        - sonarqube_data:/opt/sonarqube/data
+        - sonarqube_logs:/opt/sonarqube/logs
+        - sonarqube_extensions:/opt/sonarqube/extensions
+        - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    networks: 
+        - sonarnet
+    environment:
+        - POSTGRES_USER=sonar
+        - POSTGRES_PASSWORD=sonar
+        - POSTGRES_DB=sonarqube
+    volumes:
+        - sonarqube_db:/var/lib/postgresql
+        - postgresql_data:/var/lib/postgresql/data
+
+volumes:
+    postgresql_data:
+    sonarqube_bundled-plugins:
+    sonarqube_conf:
+    sonarqube_data:
+    sonarqube_db:
+    sonarqube_logs:
+    sonarqube_extensions:
+    jenkins-docker-certs:
+    jenkins-data:
+
+networks:
+    sonarnet:
+        driver: bridge
