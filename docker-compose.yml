@@ -32,13 +32,14 @@ services:
         - jenkins-docker-certs:/certs/client:ro
   sonarqube:
     image: sonarqube:latest
+    command: -Dsonar.ce.javaOpts=-Xmx2048m
     restart: unless-stopped
     networks: 
         - sonarnet
     environment:
         - SONARQUBE_JDBC_USERNAME=sonar
         - SONARQUBE_JDBC_PASSWORD=sonar
-        - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube
+        - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube       
     ports:
         - 9872:9000
     volumes:
