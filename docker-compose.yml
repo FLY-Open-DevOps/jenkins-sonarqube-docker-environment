@@ -62,11 +62,11 @@ services:
         - sonarqube_db:/var/lib/postgresql
         - postgresql_data:/var/lib/postgresql/data
   nginx: 
-    build:
-        dockerfile: nginx-custom.dockerfile
+    build: 
         context: .
-    image: nginx:latest
-    container_name: nginx
+        dockerfile: nginx-custom.dockerfile
+    container_name: nginx-reverse-proxy
+    restart: unless-stopped
     networks:
         - sonarnet 
     volumes:

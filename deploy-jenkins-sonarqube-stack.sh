@@ -42,8 +42,9 @@ if [ -x "$(command -v java)" ]; then
             echo "Realizando o deploy das aplicações..."
             docker-compose up -d
             echo "O deploy das aplicaçãoes foi finalizado!"
-            echo "Acesse o Jenkins em http://[HOST-ADDRESS]:9871/jenkins"
-            echo "Acesse o SonarQube em http://[HOST-ADDRESS]:9872/sonar"
+            echo "Acesse o Jenkins em http://[HOST-ADDRESS]/jenkins"
+            echo "Acesse o SonarQube em http://[HOST-ADDRESS]/sonar"
+            echo "A porta padrão utilizada por este build é a 80. Você pode alterá-la modificando as configurações do Nginx em nginx.conf"
         else
             echo "Ocorreu um problema ao realizar o deploy do ambiente. O docker-compose não foi instalado. Procure o administrador do sistema!"
         fi
