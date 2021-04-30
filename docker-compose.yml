@@ -16,7 +16,9 @@ services:
     ports:
         - 2376:2376
   jenkins:
-    image: myjenkins-blueocean:1.1
+    build: 
+        context: .
+        dockerfile: Dockerfile
     restart: unless-stopped
     networks: 
         - sonarnet
