@@ -2,6 +2,7 @@ version: "3"
 services:
   docker-in-docker:
     image: 'docker:dind'
+    container_name: docker-in-docker
     restart: unless-stopped
     privileged: true
     networks: 
@@ -20,6 +21,7 @@ services:
         context: .
         dockerfile: Dockerfile
     restart: unless-stopped
+    container_name: jenkins
     networks: 
         - sonarnet
     depends_on:
@@ -34,6 +36,7 @@ services:
         - jenkins-docker-certs:/certs/client:ro
   sonarqube:
     image: sonarqube:latest
+    container_name: sonarqube
     command: -Dsonar.ce.javaOpts=-Xmx2048m
     restart: unless-stopped
     networks: 
@@ -54,6 +57,7 @@ services:
   db:
     image: postgres:latest
     restart: unless-stopped
+    container_name: postgres
     networks: 
         - sonarnet
     environment:
