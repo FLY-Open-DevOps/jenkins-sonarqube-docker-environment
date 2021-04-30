@@ -10,7 +10,7 @@ $ sudo apt install git
 Se a instalação do git foi concluída ou o mesmo já estiver instalado, então:
 
 Realize o pull do projeto
-$ git clone https://github.com/[your-github-username]/jenkins-sonarqube-docker-environment.git
+$ git clone https://github.com/andrevilas/jenkins-sonarqube-docker-environment.git
 
 Entre na pasta do projeto
 $ cd jenkins-sonarqube-docker-environment
