@@ -1,5 +1,5 @@
 # jenkins-sonarqube-docker-environment
-(Jenkins + SonarQube + PostgreSQL) on Docker
+(Jenkins + SonarQube + PostgreSQL + Nginx) on Docker
 
 Esse script foi idealizado para automatizar a criação dos conteiners das aplicações citadas acima. A premissa é de que se está trabalhando em uma instância de um servidor Ubuntu 20.04 sem os pacotes necessários instalados. Siga os passos abaixo e tenha seu ambiente de suporte à integração contínua disponibilizado. Obs.: é necessário possuir as credenciais de adminitrador do sistema.
 
