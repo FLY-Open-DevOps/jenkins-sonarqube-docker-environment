@@ -42,8 +42,8 @@ if [ -x "$(command -v java)" ]; then
             echo "Realizando o deploy das aplicações..."
             docker-compose up -d
             echo "O deploy das aplicaçãoes foi finalizado!"
-            echo "Acesse o Jenkins em http://[HOST-ADDRESS]:9871"
-            echo "Acesse o SonarQube em http://[HOST-ADDRESS]:9872"
+            echo "Acesse o Jenkins em http://[HOST-ADDRESS]:9871/jenkins"
+            echo "Acesse o SonarQube em http://[HOST-ADDRESS]:9872/sonar"
         else
             echo "Ocorreu um problema ao realizar o deploy do ambiente. O docker-compose não foi instalado. Procure o administrador do sistema!"
         fi

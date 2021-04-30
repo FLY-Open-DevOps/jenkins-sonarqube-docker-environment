@@ -20,13 +20,13 @@ services:
     restart: unless-stopped
     networks: 
         - sonarnet
+    depends_on:
+        - nginx
     environment:
         - DOCKER_HOST=tcp://docker:2376
         - DOCKER_CERT_PATH=/certs/client
         - DOCKER_TLS_VERIFY=1
-    ports:
-        - 9871:8080
-        - 50000:50000
+        - JENKINS_OPTS="--prefix=/jenkins"
     volumes:
         - jenkins-data:/var/jenkins_home
         - jenkins-docker-certs:/certs/client:ro
@@ -36,12 +36,13 @@ services:
     restart: unless-stopped
     networks: 
         - sonarnet
+    depends_on:
+        - nginx  
     environment:
         - SONARQUBE_JDBC_USERNAME=sonar
         - SONARQUBE_JDBC_PASSWORD=sonar
         - SONARQUBE_JDBC_URL=jdbc:postgresql://db:5432/sonarqube       
-    ports:
-        - 9872:9000
+        - SONAR_WEB_CONTEXT=/sonar
     volumes:
         - sonarqube_conf:/opt/sonarqube/conf
         - sonarqube_data:/opt/sonarqube/data
@@ -60,6 +61,22 @@ services:
     volumes:
         - sonarqube_db:/var/lib/postgresql
         - postgresql_data:/var/lib/postgresql/data
+  nginx: 
+    build:
+        dockerfile: nginx-custom.dockerfile
+        context: .
+    image: nginx:latest
+    container_name: nginx
+    networks:
+        - sonarnet 
+    volumes:
+        - nginx_data:/etc/nginx/
+        - letsencrypt_data:/etc/letsencrypt/
+    ports:
+        - 80:80
+        - 443:443
+        - 9871:9871
+        - 9872:9872
 
 volumes:
     postgresql_data:
@@ -71,6 +88,8 @@ volumes:
     sonarqube_extensions:
     jenkins-docker-certs:
     jenkins-data:
+    nginx_data:
+    letsencrypt_data:
 
 networks:
     sonarnet:
